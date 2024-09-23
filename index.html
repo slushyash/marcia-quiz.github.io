@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modified Marcia Identity Questionnaire</title>
+    <meta charset="UTF-8">
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question-text {
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        #results {
+            margin-top: 30px;
+        }
+        #submitBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        h2 {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Modified Marcia Identity Questionnaire</h1>
+    <p>Please select the option that best represents your agreement with each statement:</p>
+    <ul>
+        <li>1 - Strongly Disagree</li>
+        <li>2 - Disagree</li>
+        <li>3 - Neutral</li>
+        <li>4 - Agree</li>
+        <li>5 - Strongly Agree</li>
+    </ul>
+    <form id="quizForm">
+        <!-- Questions will be generated here -->
+    </form>
+    <button id="submitBtn">Submit</button>
+    <div id="results"></div>
+    <script>
+        const questions = [
+            { number: 1, text: "I haven't chosen the occupation I really want to get into, and I'm just working at whatever is available until something better comes along." },
+            { number: 2, text: "I sometimes join in recreational activities when asked, but I rarely try anything on my own." },
+            { number: 3, text: "I haven't really thought about a 'dating style.' I'm not too concerned whether I date or not." },
+            { number: 4, text: "Politics is something that I can never be too sure about because things change so fast. But I think it's important to know what I can politically stand for and believe in." },
+            { number: 5, text: "I'm still trying to decide how capable I am as a person and what jobs will be right for me." },
+            { number: 6, text: "I don't give religion much thought and it doesn't bother me one way or the other." },
+            { number: 7, text: "There are many reasons for friendships, but I choose my close friends on the basis of certain values and similarities that I've personally decided on." },
+            { number: 8, text: "While I don't have one recreational activity I'm really committed to, I'm experiencing numerous leisure outlets to identify one I can really get involved in." },
+            { number: 9, text: "Based on past experiences, I've chosen the type of dating relationship I want now." },
+            { number: 10, text: "I might have thought about a lot of different jobs, but there's never really any question since my parents said what they wanted." },
+            { number: 11, text: "A person's faith is unique to each individual. I've considered and reconsidered it myself and know what I can believe." },
+            { number: 12, text: "My parents know what's best for me in terms of how to choose my friends." },
+            { number: 13, text: "I don't think about dating much. I just kind of take it as it comes." },
+            { number: 14, text: "I guess I'm pretty much like my folks when it comes to politics. I follow what they do in terms of voting and such." },
+            { number: 15, text: "I'm really not interested in finding the right job; any job will do. I just seem to flow with what is available." },
+            { number: 16, text: "I'm not sure what religion means to me. I'd like to make up my mind but I'm not done looking yet." },
+            { number: 17, text: "My own views on a desirable life style were taught to me by my parents and I don't see any need to question what they taught me." },
+            { number: 18, text: "I don't have any real close friends, and I don't think I'm looking for one right now." },
+            { number: 19, text: "Sometimes I join in leisure activities, but I really don't see a need to look for a particular activity to do regularly." },
+            { number: 20, text: "I'm trying out different types of dating relationships, I just haven't decided what is best for me." },
+            { number: 21, text: "There are so many different political parties and ideals, I can't decide which to follow until I figure it all out." },
+            { number: 22, text: "It took me a while to figure it out, but now I really know what I want for a career." },
+            { number: 23, text: "In finding an acceptable viewpoint to life itself, I find myself engaging in a lot of discussions with others and some self-exploration." },
+            { number: 24, text: "I only go out with the type of people my parents expect me to date." },
+            { number: 25, text: "I've thought my political beliefs through and realize I can agree with some and not other aspects of what my parents believe." },
+            { number: 26, text: "My parents decided a long time ago what I should go into for employment and I'm following through on their plans." },
+            { number: 27, text: "I've gone through a period of serious questions about faith and can now say I understand what I believe in as an individual." },
+            { number: 28, text: "I've tried many different friendships and now I have a clear idea of what I look for in a friend." },
+            { number: 29, text: "My preferences about dating are still in the process of developing, I haven't fully decided yet." },
+            { number: 30, text: "It took me a long time to decide but now I know for sure what direction to move in for a career." },
+            { number: 31, text: "I attend the same church my family has always attended. I've never really questioned why." },
+            { number: 32, text: "I don't have any close friends. I just like to hang around with the crowd." },
+            { number: 33, text: "I've been experiencing a variety of recreational activities in hopes of finding one or more I can enjoy for some time to come." },
+            { number: 34, text: "I've dated different types of people and now know exactly what my own 'unwritten rules' for dating are and who I will date." },
+            { number: 35, text: "I really have never been involved in politics enough to have made a firm stand one way or the other." },
+            { number: 36, text: "I just can't decide what to do for an occupation. There are so many that have possibilities." },
+            { number: 37, text: "I really don't know what kind of friend is best for me. I'm trying to figure out exactly what friendship means to me." },
+            { number: 38, text: "All of my recreational preferences I got from my parents and I haven't really tried anything else." },
+            { number: 39, text: "I date only people my parents would approve of." },
+            { number: 40, text: "My folks have always had their own political and moral beliefs about issues like abortion and I've always gone along accepting what they have." }
+        ];
+
+        const identityAchievement = [4, 7, 9, 11, 22, 25, 27, 28, 30, 34];
+        const identityMoratorium = [5, 8, 16, 20, 21, 23, 29, 33, 36, 37];
+        const identityForeclosure = [10, 12, 14, 17, 24, 26, 31, 38, 39, 40];
+        const identityDiffusion = [1, 2, 3, 6, 13, 15, 18, 19, 32, 35];
+
+        window.onload = function() {
+            const form = document.getElementById('quizForm');
+            const optionLabels = [
+                '1 - Strongly Disagree',
+                '2 - Disagree',
+                '3 - Neutral',
+                '4 - Agree',
+                '5 - Strongly Agree'
+            ];
+
+            questions.forEach(question => {
+                // Create a div for each question
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+
+                // Create the question text
+                const questionText = document.createElement('div');
+                questionText.classList.add('question-text');
+                questionText.innerHTML = '<strong>' + question.number + '.</strong> ' + question.text;
+
+                questionDiv.appendChild(questionText);
+
+                // Create the options
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                for (let i = 1; i <= 5; i++) {
+                    const label = document.createElement('label');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'q' + question.number;
+                    radio.value = i;
+                    radio.id = 'q' + question.number + '_option' + i;
+                    label.htmlFor = radio.id;
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(' ' + optionLabels[i - 1]));
+                    optionsDiv.appendChild(label);
+                }
+
+                questionDiv.appendChild(optionsDiv);
+                form.appendChild(questionDiv);
+            });
+
+            document.getElementById('submitBtn').addEventListener('click', function() {
+                // Collect answers and calculate scores
+                let achievementScore = 0;
+                let moratoriumScore = 0;
+                let foreclosureScore = 0;
+                let diffusionScore = 0;
+
+                let unansweredQuestions = [];
+
+                for (let i = 1; i <= 40; i++) {
+                    const radios = document.getElementsByName('q' + i);
+                    let selectedValue = null;
+                    for (const radio of radios) {
+                        if (radio.checked) {
+                            selectedValue = parseInt(radio.value);
+                            break;
+                        }
+                    }
+                    if (selectedValue === null) {
+                        unansweredQuestions.push(i);
+                        continue;
+                    }
+
+                    if (identityAchievement.includes(i)) {
+                        achievementScore += selectedValue;
+                    }
+                    if (identityMoratorium.includes(i)) {
+                        moratoriumScore += selectedValue;
+                    }
+                    if (identityForeclosure.includes(i)) {
+                        foreclosureScore += selectedValue;
+                    }
+                    if (identityDiffusion.includes(i)) {
+                        diffusionScore += selectedValue;
+                    }
+                }
+
+                if (unansweredQuestions.length > 0) {
+                    alert('Please answer all questions. Unanswered questions: ' + unansweredQuestions.join(', '));
+                    return;
+                }
+
+                // Display results
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '<h2>Your Scores:</h2>';
+                resultsDiv.innerHTML += '<p><strong>Identity Achievement:</strong> ' + achievementScore + '</p>';
+                resultsDiv.innerHTML += '<p><strong>Identity Moratorium:</strong> ' + moratoriumScore + '</p>';
+                resultsDiv.innerHTML += '<p><strong>Identity Foreclosure:</strong> ' + foreclosureScore + '</p>';
+                resultsDiv.innerHTML += '<p><strong>Identity Diffusion:</strong> ' + diffusionScore + '</p>';
+
+                // Determine highest category
+                const scores = {
+                    'Identity Achievement': achievementScore,
+                    'Identity Moratorium': moratoriumScore,
+                    'Identity Foreclosure': foreclosureScore,
+                    'Identity Diffusion': diffusionScore
+                };
+
+                const highestScore = Math.max(...Object.values(scores));
+                const highestCategories = Object.keys(scores).filter(key => scores[key] === highestScore);
+
+                resultsDiv.innerHTML += '<p><strong>Your highest category is:</strong> ' + highestCategories.join(', ') + '</p>';
+                setTimeout(() => {
+                    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            });
+        };
+    </script>
+</body>
+</html>
